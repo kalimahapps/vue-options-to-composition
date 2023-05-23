@@ -91,11 +91,9 @@ class Parser {
 		const imports :string[] = [];
 
 		for (const importDeclaration of importDeclarations) {
-			const { specifiers, source } = importDeclaration;
-			const { value } = source;
-			const { name } = specifiers[0].local;
+			const { start, end } = importDeclaration;
 
-			imports.push(`import ${name} from '${value}';`);
+			imports.push(this.input.slice(start, end));
 		}
 
 		return imports;
