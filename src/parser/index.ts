@@ -27,9 +27,9 @@ class Parser {
 	callbacksMap: CallbacksMap = {
 		data: 'dataCallback',
 		props: 'propsCallback',
+		computed: 'computedCallback',
 		methods: 'methodsCallback',
 		watch: 'watchCallback',
-		computed: 'computedCallback',
 		created: 'lifecycleCallback',
 		mounted: 'lifecycleCallback',
 		beforeDestroy: 'lifecycleCallback',
