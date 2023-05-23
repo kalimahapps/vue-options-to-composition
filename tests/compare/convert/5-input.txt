@@ -1,0 +1,30 @@
+export default {
+	data:{
+      items: [],
+      list: {},
+    },
+  props: ['loading', 'lazy', 'disabled'],
+  methods:{
+  	isLazy(){
+      return this.lazy;
+    },
+    isLoading: function(){
+      return this.loading;
+    },
+    isDisabled: () => {
+      return this.disabled;
+    }
+  },
+  watch:{
+    loading(newValue){
+      console.log("Value", newValue);
+    },
+    disabled:{
+      immediate: true,
+    handler(value) {
+      this.bar = value;
+    }
+    }
+
+  }
+}

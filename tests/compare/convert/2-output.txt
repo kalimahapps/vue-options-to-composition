@@ -1,0 +1,170 @@
+import objectAssign from 'element-ui/src/utils/merge';
+import { reactive, watch, computed } from 'vue';
+
+
+// Data
+const fields = reactive([]);
+const potentialLabelWidthArr = reactive([]);
+
+// Props
+const props = defineProps({
+	model: Object,
+	rules: Object,
+	labelPosition: String,
+	labelWidth: String,
+	labelSuffix: {
+		type: String,
+		default: ''
+	},
+	inline: Boolean,
+	inlineMessage: Boolean,
+	statusIcon: Boolean,
+	showMessage: {
+		type: Boolean,
+		default: true
+	},
+	size: String,
+	disabled: Boolean,
+	validateOnRuleChange: {
+		type: Boolean,
+		default: true
+	},
+	hideRequiredAsterisk: {
+		type: Boolean,
+		default: false
+	}
+});
+
+// Methods
+const resetFields = function() {
+	if (!props.model) {
+		console.warn('[Element Warn][Form]model is required for resetFields to work.');
+		return;
+	}
+	fields.forEach(field => {
+		field.resetField();
+	});
+}
+
+const clearValidate = function(props = []) {
+	const fields = props.length
+		? (typeof props === 'string'
+			? fields.filter(field => props === field.prop)
+			: fields.filter(field => props.indexOf(field.prop) > -1)
+		) : fields;
+	fields.forEach(field => {
+		field.clearValidate();
+	});
+}
+
+const validate = function(callback) {
+	if (!props.model) {
+		console.warn('[Element Warn][Form]model is required for validate to work!');
+		return;
+	}
+
+	let promise;
+	// if no callback, return promise
+	if (typeof callback !== 'function' && window.Promise) {
+		promise = new window.Promise((resolve, reject) => {
+			callback = function(valid, invalidFields) {
+				valid ? resolve(valid) : reject(invalidFields);
+			};
+		});
+	}
+
+	let valid = true;
+	let count = 0;
+	// 如果需要验证的fields为空，调用验证时立刻返回callback
+	if (fields.length === 0 && callback) {
+		callback(true);
+	}
+	let invalidFields = {};
+	fields.forEach(field => {
+		field.validate('', (message, field) => {
+			if (message) {
+				valid = false;
+			}
+			invalidFields = objectAssign({}, invalidFields, field);
+			if (typeof callback === 'function' && ++count === fields.length) {
+				callback(valid, invalidFields);
+			}
+		});
+	});
+
+	if (promise) {
+		return promise;
+	}
+}
+
+const validateField = function(props, cb) {
+	props = [].concat(props);
+	const fields = fields.filter(field => props.indexOf(field.prop) !== -1);
+	if (!fields.length) {
+		console.warn('[Element Warn]please pass correct props!');
+		return;
+	}
+
+	fields.forEach(field => {
+		field.validate('', cb);
+	});
+}
+
+const getLabelWidthIndex = function(width) {
+	const index = potentialLabelWidthArr.indexOf(width);
+	// it's impossible
+	if (index === -1) {
+		throw new Error('[ElementForm]unpected width ', width);
+	}
+	return index;
+}
+
+const registerLabelWidth = function(val, oldVal) {
+	if (val && oldVal) {
+		const index = getLabelWidthIndex(oldVal);
+		potentialLabelWidthArr.splice(index, 1, val);
+	} else if (val) {
+		potentialLabelWidthArr.push(val);
+	}
+}
+
+const deregisterLabelWidth = function(val) {
+	const index = getLabelWidthIndex(val);
+	potentialLabelWidthArr.splice(index, 1);
+}
+
+
+// Watch
+watch(rules, function() {
+	// remove then add event listeners on form-item after form rules change
+	fields.forEach(field => {
+		field.removeValidateEvents();
+		field.addValidateEvents();
+	});
+
+	if (props.validateOnRuleChange) {
+		validate(() => {});
+	}
+})
+
+
+// Computed
+const autoLabelWidth = computed(() => {
+	if (!potentialLabelWidthArr.length) return 0;
+	const max = Math.max(...potentialLabelWidthArr);
+	return max ? `${max}px` : '';
+})
+
+
+// Created
+this.$on('el.form.addField', (field) => {
+	if (field) {
+		fields.push(field);
+	}
+});
+/* istanbul ignore next */
+this.$on('el.form.removeField', (field) => {
+	if (field.prop) {
+		fields.splice(fields.indexOf(field), 1);
+	}
+});

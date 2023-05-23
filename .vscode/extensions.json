@@ -1,0 +1,16 @@
+{
+  "recommendations": [
+    "Vue.volar",
+    "Vue.vscode-typescript-vue-plugin",
+    "antfu.file-nesting",
+    "usernamehw.errorlens",
+    "KalimahApps.jameel",
+    "KalimahApps.tailwindcss-kit",
+    "file-icons.file-icons",
+    "idered.npm",
+    "dbaeumer.vscode-eslint"
+  ],
+  "unwantedRecommendations": [
+    "esbenp.prettier-vscode",
+  ]
+}

@@ -1,0 +1,243 @@
+import oneOf from '../../utils/assist';
+import Options from './options.vue';
+import Locale from '../../mixins/locale';
+import { reactive, watch, computed } from 'vue';
+
+
+// Data
+const prefixCls = reactive(prefixCls);
+const currentPage = reactive(this.current);
+const currentPageSize = reactive(this.pageSize);
+
+// Props
+const props = defineProps({
+	current: {
+		type: Number,
+		default: 1
+	},
+	total: {
+		type: Number,
+		default: 0
+	},
+	pageSize: {
+		type: Number,
+		default: 10
+	},
+	pageSizeOpts: {
+		type: Array,
+		default () {
+			return [10, 20, 30, 40];
+		}
+	},
+	placement: {
+		validator (value) {
+			return oneOf(value, ['top', 'bottom']);
+		},
+		default: 'bottom'
+	},
+	transfer: {
+		type: Boolean,
+		default: false
+	},
+	size: {
+		validator (value) {
+			return oneOf(value, ['small']);
+		}
+	},
+	simple: {
+		type: Boolean,
+		default: false
+	},
+	showTotal: {
+		type: Boolean,
+		default: false
+	},
+	showElevator: {
+		type: Boolean,
+		default: false
+	},
+	showSizer: {
+		type: Boolean,
+		default: false
+	},
+	className: {
+		type: String
+	},
+	styles: {
+		type: Object
+	}
+});
+
+// Methods
+const changePage = function(page) {
+	if (currentPage != page) {
+		currentPage = page;
+		this.$emit('update:current', page);
+		this.$emit('on-change', page);
+	}
+}
+
+const prev = function() {
+	const current = currentPage;
+	if (current <= 1) {
+		return false;
+	}
+	changePage(current - 1);
+}
+
+const next = function() {
+	const current = currentPage;
+	if (current >= this.allPages) {
+		return false;
+	}
+	changePage(current + 1);
+}
+
+const fastPrev = function() {
+	const page = currentPage - 5;
+	if (page > 0) {
+		changePage(page);
+	} else {
+		changePage(1);
+	}
+}
+
+const fastNext = function() {
+	const page = currentPage + 5;
+	if (page > this.allPages) {
+		changePage(this.allPages);
+	} else {
+		changePage(page);
+	}
+}
+
+const onSize = function(pageSize) {
+	currentPageSize = pageSize;
+	this.$emit('on-page-size-change', pageSize);
+	changePage(1);
+}
+
+const onPage = function(page) {
+	changePage(page);
+}
+
+const keyDown = function(e) {
+	const key = e.keyCode;
+	const condition = (key >= 48 && key <= 57) || (key >= 96 && key <= 105) || key === 8 || key === 37 || key === 39;
+
+	if (!condition) {
+		e.preventDefault();
+	}
+}
+
+const keyUp = function(e) {
+	const key = e.keyCode;
+	const val = parseInt(e.target.value);
+
+	if (key === 38) {
+		prev();
+	} else if (key === 40) {
+		next();
+	} else if (key === 13) {
+		let page = 1;
+
+		if (val > this.allPages) {
+			page = this.allPages;
+		} else if (val <= 0 || !val) {
+			page = 1;
+		} else {
+			page = val;
+		}
+
+		e.target.value = page;
+		changePage(page);
+	}
+}
+
+
+// Watch
+watch(total, function(val) {
+	let maxPage = Math.ceil(val / currentPageSize);
+	if (maxPage < currentPage && maxPage > 0) {
+		currentPage = maxPage;
+	}
+})
+
+watch(current, function(val) {
+	currentPage = val;
+})
+
+watch(pageSize, function(val) {
+	currentPageSize = val;
+})
+
+
+// Computed
+const isSmall = computed(() => {
+	return !!props.size;
+})
+
+const allPages = computed(() => {
+	const allPage = Math.ceil(props.total / currentPageSize);
+	return (allPage === 0) ? 1 : allPage;
+})
+
+const simpleWrapClasses = computed(() => {
+	return [
+		`${prefixCls}`,
+		`${prefixCls}-simple`,
+		{
+			[`${props.className}`]: !!props.className
+		}
+	];
+})
+
+const simplePagerClasses = computed(() => {
+	return `${prefixCls}-simple-pager`;
+})
+
+const wrapClasses = computed(() => {
+	return [
+		`${prefixCls}`,
+		{
+			[`${props.className}`]: !!props.className,
+			'mini': !!props.size
+		}
+	];
+})
+
+const prevClasses = computed(() => {
+	return [
+		`${prefixCls}-prev`,
+		{
+			[`${prefixCls}-disabled`]: currentPage === 1
+		}
+	];
+})
+
+const nextClasses = computed(() => {
+	return [
+		`${prefixCls}-next`,
+		{
+			[`${prefixCls}-disabled`]: currentPage === this.allPages
+		}
+	];
+})
+
+const firstPageClasses = computed(() => {
+	return [
+		`${prefixCls}-item`,
+		{
+			[`${prefixCls}-item-active`]: currentPage === 1
+		}
+	];
+})
+
+const lastPageClasses = computed(() => {
+	return [
+		`${prefixCls}-item`,
+		{
+			[`${prefixCls}-item-active`]: currentPage === this.allPages
+		}
+	];
+})

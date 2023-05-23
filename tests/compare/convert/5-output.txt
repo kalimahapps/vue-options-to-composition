@@ -1,0 +1,32 @@
+import { reactive, watch } from 'vue';
+
+
+// Data
+const items = reactive([]);
+const list = reactive({});
+
+// Props
+const props = defineProps(['loading', 'lazy', 'disabled']);
+
+// Methods
+const isLazy = function(){
+	return props.lazy;
+}
+
+const isLoading = function(){
+	return props.loading;
+}
+
+const isDisabled = () => {
+	return props.disabled;
+}
+
+
+// Watch
+watch(loading, function(newValue){
+	console.log("Value", newValue);
+})
+
+watch(disabled, function (value) {
+	this.bar = value;
+}, { immediate: true })

@@ -1,0 +1,51 @@
+import Group from 'vux';
+import { reactive, ref } from 'vue';
+
+
+// Data
+const title = ref('默认为空');
+const value_0_1 = reactive([]);
+const value = reactive([]);
+const title2 = ref('设置值');
+const value2 = reactive(['天津市', '市辖区', '和平区']);
+const value3 = reactive(['广东省', '中山市', '--']);
+const addressData = reactive(ChinaAddressV4Data);
+const value4 = reactive([]);
+const value5 = reactive(['广东省', '深圳 市', '南山区']);
+const showAddress = ref('false');
+
+// Methods
+const doShowAddress = function() {
+	showAddress.value = true
+	setTimeout(() => {
+		showAddress.value = false
+	}, 2000)
+}
+
+const onShadowChange = function(ids, names) {
+	console.log(ids, names)
+}
+
+const changeData = function() {
+	value2 = ['430000', '430400', '430407']
+}
+
+const changeDataByLabels = function() {
+	value2 = ['广东省', '广州市', '天河区']
+}
+
+const changeDataByLabels2 = function() {
+	value2 = ['广东省', '中山市', '--']
+}
+
+const getName = function(value) {
+	return value2name(value, ChinaAddressV4Data)
+}
+
+const logHide = function(str) {
+	console.log('on-hide', str)
+}
+
+const logShow = function(str) {
+	console.log('on-show')
+}
