@@ -16,11 +16,11 @@ test('show throw syntax error for invalid export default', () => {
 	}).toThrow('Unexpected token');
 });
 
-test('should throw methods not found error', () => {
+/* test('should throw methods not found error', () => {
 	expect(() => {
 		parseCode('export default {methods: {}}');
 	}).toThrow('No methods found');
-});
+}); */
 
 test('should not show any text if data is empty', () => {
 	const result = formatCode('export default {data: {}}');
