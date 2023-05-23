@@ -32,6 +32,15 @@ class MethodParser {
 	propsIdentifiers :string[] = [];
 
 	/**
+	 * List of self identifiers.
+	 * This is the list of the current type. For example, if
+	 * the current type is `computed`, then the self identifiers
+	 * will be the list of computed identifiers. It will be used
+	 * to replace `this` keyword when used in the same type.
+	 */
+	selfIdentifiers :string[] = [];
+
+	/**
 	 * Holds the type of method (computed, watch .. etc)
 	 */
 	methodType: MethodType = 'method';
@@ -39,8 +48,7 @@ class MethodParser {
 	/**
 	 * Convert methods to regular functions
 	 *
-	 * @param {any}    data            Methods object
-	 * @param {object} dataIdentifiers List of reactive properties
+	 * @param {any} data Methods object
 	 */
 	constructor (data: any) {
 		const { properties } = data.value;
@@ -153,8 +161,9 @@ class MethodParser {
 			// Check if identifier is a method or computed
 			const isMethod = this.methodIdentifiers.includes(identifier);
 			const isComputed = this.computedIdentifiers.includes(identifier);
-			if (isMethod || isComputed) {
-			// if (isMethod && this.methodType === 'computed') {
+			const isSelf = this.selfIdentifiers.includes(identifier);
+
+			if (isMethod || isComputed || isSelf) {
 				return identifier;
 			}
 
@@ -169,6 +178,17 @@ class MethodParser {
 	}
 
 	/**
+	 * Get self identifiers (the method that belongs to the current type)
+	 */
+	getSelfIdentifiers () {
+		this.methods.forEach((property: any) => {
+			const { key } = property;
+
+			this.selfIdentifiers.push(key.name);
+		});
+	}
+
+	/**
 	 * Convert methods object to regular functions
 	 *
 	 * @return {string[]} The reactive properties
@@ -179,6 +199,9 @@ class MethodParser {
 		}
 
 		const output :string[] = [];
+
+		this.getSelfIdentifiers();
+
 		/*eslint complexity: ["warn", 7]*/
 		this.methods.forEach((property: any) => {
 			const { key, value } = property;
@@ -216,7 +239,7 @@ class MethodParser {
 						return key.name === 'handler';
 					});
 
-					const { start, end, type: handlerType } = handlerProperty.value;
+					const { start, end } = handlerProperty.value;
 					const handlerBody = this.fullInput.slice(start, end);
 
 					// Other properties
