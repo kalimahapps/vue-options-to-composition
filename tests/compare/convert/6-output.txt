@@ -1,0 +1,64 @@
+import { GlIcon, GlTab } from '@gitlab/ui';
+import { mapActions, mapGetters } from 'vuex';
+import { __, sprintf } from '~/locale';
+import ChangedFileIcon from '~/vue_shared/components/changed_file_icon.vue';
+import FileIcon from '~/vue_shared/components/file_icon.vue';
+import FileStatusIcon from './repo_file_status_icon.vue';
+import { ref, computed } from 'vue';
+
+
+// Data
+const tabMouseOver = ref('false');
+
+// Props
+const props = defineProps({
+	tab: {
+		type: Object,
+		required: true,
+	},
+});
+
+// Computed
+const closeLabel = computed(() => {
+	if (fileHasChanged) {
+		return sprintf(__('%{tabname} changed'), { tabname: props.tab.name });
+	}
+	return sprintf(__('Close %{tabname}'), { tabname: props.tab.name });
+})
+
+const showChangedIcon = computed(() => {
+	if (props.tab.pending) return true;
+
+	return fileHasChanged ? !tabMouseOver.value : false;
+})
+
+const fileHasChanged = computed(() => {
+	return props.tab.changed || props.tab.tempFile || props.tab.staged || props.tab.deleted;
+})
+
+
+// Methods
+const clickFile = function(tab) {
+	if (tab.active) return;
+
+	this.updateDelayViewerUpdated(true);
+
+	if (tab.pending) {
+		this.openPendingTab({ file: tab,
+			keyPrefix: tab.staged ? 'staged' : 'unstaged' });
+	} else {
+		this.$router.push(this.getUrlForPath(tab.path));
+	}
+}
+
+const mouseOverTab = function() {
+	if (this.fileHasChanged) {
+		tabMouseOver.value = true;
+	}
+}
+
+const mouseOutTab = function() {
+	if (this.fileHasChanged) {
+		tabMouseOver.value = false;
+	}
+}

@@ -1,9 +1,9 @@
 import ImageViewer from './image-viewer';
 import Locale from 'element-ui/src/mixins/locale';
-import on from 'element-ui/src/utils/dom';
-import isString from 'element-ui/src/utils/types';
+import { on, off, getScrollContainer, isInContainer } from 'element-ui/src/utils/dom';
+import { isString, isHtmlElement } from 'element-ui/src/utils/types';
 import throttle from 'throttle-debounce/throttle';
-import { reactive, ref, watch, computed, onMounted, onBeforeUnmount } from 'vue';
+import { reactive, ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
 
 
 // Data
@@ -31,6 +31,42 @@ const props = defineProps({
 	initialIndex: Number
 });
 
+// Computed
+const imageStyle = computed(() => {
+	const { fit } = this;
+	if (!this.$isServer && fit) {
+		return isSupportObjectFit()
+			? { 'object-fit': fit }
+			: this.getImageStyle(fit);
+	}
+	return {};
+})
+
+const alignCenter = computed(() => {
+	return !this.$isServer && !isSupportObjectFit() && props.fit !== ObjectFit.FILL;
+})
+
+const preview = computed(() => {
+	const { previewSrcList } = this;
+	return Array.isArray(previewSrcList) && previewSrcList.length > 0;
+})
+
+const imageIndex = computed(() => {
+	let previewIndex = 0;
+	const initialIndex = props.initialIndex;
+	if (initialIndex >= 0) {
+		previewIndex = initialIndex;
+		return previewIndex;
+	}
+	const srcIndex = props.previewSrcList.indexOf(props.src);
+	if (srcIndex >= 0) {
+		previewIndex = srcIndex;
+		return previewIndex;
+	}
+	return previewIndex;
+})
+
+
 // Methods
 const loadImage = function() {
 	if (this.$isServer) return;
@@ -40,8 +76,8 @@ const loadImage = function() {
 	error.value = false;
 
 	const img = new Image();
-	img.onload = e => this.handleLoad(e, img);
-	img.onerror = this.handleError.bind(this);
+	img.onload = e => handleLoad(e, img);
+	img.onerror = handleError.bind(this);
 
 	// bind html attrs
 	// so it can behave consistently
@@ -69,7 +105,7 @@ const handleError = function(e) {
 const handleLazyLoad = function() {
 	if (isInContainer(this.$el, this._scrollContainer)) {
 		show = true;
-		this.removeLazyLoadListener();
+		removeLazyLoadListener();
 	}
 }
 
@@ -159,42 +195,6 @@ watch(src, function(val) {
 
 watch(show, function(val) {
 	val && loadImage();
-})
-
-
-// Computed
-const imageStyle = computed(() => {
-	const { fit } = this;
-	if (!this.$isServer && fit) {
-		return isSupportObjectFit()
-			? { 'object-fit': fit }
-			: getImageStyle(fit);
-	}
-	return {};
-})
-
-const alignCenter = computed(() => {
-	return !this.$isServer && !isSupportObjectFit() && props.fit !== ObjectFit.FILL;
-})
-
-const preview = computed(() => {
-	const { previewSrcList } = this;
-	return Array.isArray(previewSrcList) && previewSrcList.length > 0;
-})
-
-const imageIndex = computed(() => {
-	let previewIndex = 0;
-	const initialIndex = props.initialIndex;
-	if (initialIndex >= 0) {
-		previewIndex = initialIndex;
-		return previewIndex;
-	}
-	const srcIndex = props.previewSrcList.indexOf(props.src);
-	if (srcIndex >= 0) {
-		previewIndex = srcIndex;
-		return previewIndex;
-	}
-	return previewIndex;
 })
 
 

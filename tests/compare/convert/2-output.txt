@@ -1,5 +1,5 @@
 import objectAssign from 'element-ui/src/utils/merge';
-import { reactive, watch, computed } from 'vue';
+import { reactive, computed, watch } from 'vue';
 
 
 // Data
@@ -34,6 +34,14 @@ const props = defineProps({
 		default: false
 	}
 });
+
+// Computed
+const autoLabelWidth = computed(() => {
+	if (!potentialLabelWidthArr.length) return 0;
+	const max = Math.max(...potentialLabelWidthArr);
+	return max ? `${max}px` : '';
+})
+
 
 // Methods
 const resetFields = function() {
@@ -145,14 +153,6 @@ watch(rules, function() {
 	if (props.validateOnRuleChange) {
 		validate(() => {});
 	}
-})
-
-
-// Computed
-const autoLabelWidth = computed(() => {
-	if (!potentialLabelWidthArr.length) return 0;
-	const max = Math.max(...potentialLabelWidthArr);
-	return max ? `${max}px` : '';
 })
 
 
