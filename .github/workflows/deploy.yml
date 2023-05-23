@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v2.5.0
+      uses: actions/checkout@vv3.5.2
 
     - name: Setup Node.js environment
       uses: actions/setup-node@master
@@ -27,7 +27,7 @@ jobs:
       run: pnpm build
 
     - name: 📂 Sync Dist Folder
-      uses: SamKirkland/FTP-Deploy-Action@4.3.3
+      uses: SamKirkland/FTP-Deploy-Action@4.3.4
       with:
         server: ${{ secrets.FTP_SERVER}}
         username: ${{ secrets.FTP_ACCOUNT}}
