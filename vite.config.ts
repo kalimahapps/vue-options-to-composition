@@ -8,11 +8,7 @@ import inheritAttrs from 'vite-plugin-vue-setup-inherit-attrs';
 import VueIconsResolver from '@kalimahapps/vue-icons/resolver';
 import Components from 'unplugin-vue-components/vite';
 export default defineConfig({
-	test: {
-		coverage: {
-			reporter: ['text'],
-		},
-	},
+	base: '/vue-options-to-composition',
 	resolve: {
 		alias: {
 			'@': path.resolve(__dirname, './src'),
@@ -38,4 +34,9 @@ export default defineConfig({
 			resolvers: [VueIconsResolver],
 		}),
 	],
+	test: {
+		coverage: {
+			reporter: ['text'],
+		},
+	},
 });
