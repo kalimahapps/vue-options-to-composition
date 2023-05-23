@@ -152,18 +152,24 @@ class MethodParser {
 	 * @return {string}              The updated function body
 	 */
 	replaceThisKeyword(functionBody: string) :string {
+		/*eslint complexity: ["warn", 9]*/
 		return functionBody.replaceAll(/this.(?<id>[\w$]+)/ug, (match, identifier) => {
 			const type = this.dataIdentifiers[identifier];
+
 			if (type) {
 				return (type === 'ref') ? `${identifier}.value` : identifier;
 			}
 
+			const isSelf = this.selfIdentifiers.includes(identifier);
+			const isComputed = this.computedIdentifiers.includes(identifier) || (isSelf && this.methodType === 'computed');
+			if (isComputed) {
+				return `${identifier}.value`;
+			}
+
 			// Check if identifier is a method or computed
 			const isMethod = this.methodIdentifiers.includes(identifier);
-			const isComputed = this.computedIdentifiers.includes(identifier);
-			const isSelf = this.selfIdentifiers.includes(identifier);
 
-			if (isMethod || isComputed || isSelf) {
+			if (isMethod || isSelf) {
 				return identifier;
 			}
 
@@ -202,7 +208,6 @@ class MethodParser {
 
 		this.getSelfIdentifiers();
 
-		/*eslint complexity: ["warn", 7]*/
 		this.methods.forEach((property: any) => {
 			const { key, value } = property;
 
