@@ -61,11 +61,13 @@
 						Main
 					</a>
 
-					<div
+					<a
+						href="https://github.com/kalimahapps/vue-options-to-composition/issues/new"
+						target="_blank"
 						:class="buttonClasses"
 					>
 						Report a bug
-					</div>
+					</a>
 
 					<div
 						:class="buttonClasses"
