@@ -20,7 +20,7 @@ const props = defineProps({
 
 // Computed
 const closeLabel = computed(() => {
-	if (fileHasChanged) {
+	if (fileHasChanged.value) {
 		return sprintf(__('%{tabname} changed'), { tabname: props.tab.name });
 	}
 	return sprintf(__('Close %{tabname}'), { tabname: props.tab.name });
@@ -29,7 +29,7 @@ const closeLabel = computed(() => {
 const showChangedIcon = computed(() => {
 	if (props.tab.pending) return true;
 
-	return fileHasChanged ? !tabMouseOver.value : false;
+	return fileHasChanged.value ? !tabMouseOver.value : false;
 })
 
 const fileHasChanged = computed(() => {
