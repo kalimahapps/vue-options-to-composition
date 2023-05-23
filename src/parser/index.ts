@@ -258,7 +258,7 @@ class Parser {
 	 */
 	parse () {
 		this.ast = parse(this.input, {
-			ecmaVersion: 6,
+			ecmaVersion: 'latest',
 			sourceType: 'module',
 		});
 
