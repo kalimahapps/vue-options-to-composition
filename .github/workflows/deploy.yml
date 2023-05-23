@@ -33,4 +33,4 @@ jobs:
         username: ${{ secrets.FTP_ACCOUNT}}
         password: ${{ secrets.FTP_PASSWORD}}
         server-dir: "./vue-options-to-composition"
-        local-dir: "./dist"
+        local-dir: "./dist/"
