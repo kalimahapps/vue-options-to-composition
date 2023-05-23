@@ -45,11 +45,10 @@ class MethodParser {
 	constructor (data: any) {
 		const { properties } = data.value;
 
-		if (properties.length === 0) {
-			throw new Error('No methods found');
-		}
-
-		this.methods = properties;
+		// Filter out spread elements
+		this.methods = properties.filter((property: any) => {
+			return property.type !== 'SpreadElement';
+		});
 	}
 
 	/**
@@ -175,13 +174,17 @@ class MethodParser {
 	 * @return {string[]} The reactive properties
 	 */
 	convert() :string[] {
+		if (this.methods.length === 0) {
+			return [];
+		}
+
 		const output :string[] = [];
+		/*eslint complexity: ["warn", 7]*/
 		this.methods.forEach((property: any) => {
 			const { key, value } = property;
 
+			const { start, end, type, async } = value;
 			const identifier = key.name;
-
-			const { start, end, type } = value;
 
 			// Extract method body from input string
 			let methodBody = this.fullInput.slice(start, end);
@@ -189,6 +192,10 @@ class MethodParser {
 			// Make sure there is a `function` keyword before the method body
 			if (type !== 'ArrowFunctionExpression' && methodBody.trim().startsWith('function') === false){
 				methodBody = `function${methodBody}`;
+			}
+
+			if (async){
+				methodBody = `async ${methodBody}`;
 			}
 
 			// Handle different method types
