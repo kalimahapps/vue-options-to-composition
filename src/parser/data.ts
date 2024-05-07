@@ -171,7 +171,7 @@ class DataParser {
 			}
 
 			// If not, it's a simple value
-			output.push(`const ${identifier} = ref('${property.value.value}');`);
+			output.push(`const ${identifier} = ref(${property.value.raw});`);
 			this.imports.ref = true;
 			this.identifiers[identifier] = 'ref';
 		});
