@@ -7,12 +7,12 @@ import { reactive, ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
 
 
 // Data
-const loading = ref('true');
-const error = ref('false');
+const loading = ref(true);
+const error = ref(false);
 const show = reactive(!this.lazy);
-const imageWidth = ref('0');
-const imageHeight = ref('0');
-const showViewer = ref('false');
+const imageWidth = ref(0);
+const imageHeight = ref(0);
+const showViewer = ref(false);
 
 // Props
 const props = defineProps({
