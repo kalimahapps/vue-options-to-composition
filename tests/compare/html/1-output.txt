@@ -1,6 +1,6 @@
-<pre class="shiki Jameel" style="background-color: #1e2429"><code><span class="line"></span>
-<span class="line"><span style="color: #7272729D">// Methods</span></span>
-<span class="line"><span style="color: #3065B1">const</span><span style="color: #BBBBBB"> </span><span style="color: #88BCFB">test</span><span style="color: #BBBBBB"> </span><span style="color: #34D399">=</span><span style="color: #BBBBBB"> </span><span style="color: #3065B1">function</span><span style="color: #BBBBBB">(){</span></span>
-<span class="line"><span style="color: #BBBBBB">	</span><span style="color: #C084FC">console</span><span style="color: #BBBBBB">.</span><span style="color: #88BCFB">log</span><span style="color: #BBBBBB">(</span><span style="color: #BBBBBB">&quot;Output test&quot;</span><span style="color: #BBBBBB">)</span></span>
-<span class="line"><span style="color: #BBBBBB">}</span></span>
+<pre class="shiki Jameel" style="background-color:#1e2429;color:#bbbbbb" tabindex="0"><code><span class="line"></span>
+<span class="line"><span style="color:#7272729D">// Methods</span></span>
+<span class="line"><span style="color:#3065B1">const</span><span style="color:#88BCFB"> test</span><span style="color:#34D399"> =</span><span style="color:#3065B1"> function</span><span style="color:#BBBBBB">(){</span></span>
+<span class="line"><span style="color:#C084FC">	console</span><span style="color:#BBBBBB">.</span><span style="color:#88BCFB">log</span><span style="color:#BBBBBB">(</span><span style="color:#BBBBBB">"Output test"</span><span style="color:#BBBBBB">)</span></span>
+<span class="line"><span style="color:#BBBBBB">}</span></span>
 <span class="line"></span></code></pre>

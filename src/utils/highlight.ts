@@ -1,4 +1,4 @@
-import { getHighlighter, toShikiTheme } from 'shiki-es';
+import { codeToHtml } from 'shiki'
 import jameelTheme from '@/jameel-color-theme.json';
 
 /**
@@ -8,11 +8,7 @@ import jameelTheme from '@/jameel-color-theme.json';
  * @return {Promise<string>}      Highlighted code
  */
 const highlight = async function(code: string) : Promise<string>{
-	const highlighter = await getHighlighter({
-		theme: toShikiTheme(jameelTheme),
-	});
-
-	return highlighter.codeToHtml(code, { lang: 'js' });
+	return await codeToHtml(code, {lang: 'javascript', theme: jameelTheme});
 };
 
 export {
