@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/prevent-abbreviations */
 /**
  * Parser for props
  */
@@ -55,19 +56,19 @@ class PropsParser {
 
 		// If properties is defined, it means that the props are defined as an object
 		if (properties) {
-			properties.forEach((property: any) => {
+			for (const property of properties) {
 				const { name } = property.key;
 				this.identifiers.push(name);
-			});
+			}
 
 			return;
 		}
 
 		// If elements is defined, it means that the props are defined as an array
-		elements.forEach((element: any) => {
+		for (const element of elements) {
 			const { value } = element;
 			this.identifiers.push(value);
-		});
+		};
 	}
 
 	/**

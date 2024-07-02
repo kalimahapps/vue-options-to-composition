@@ -1,7 +1,7 @@
 import { parse } from 'acorn';
 import DataParser from './data';
 import MethodParser from './methods';
-import PropsParser from './props';
+import PropertiesParser from './props';
 import Lifecycle from './lifecycle';
 
 type CallbacksMap = {
@@ -118,15 +118,14 @@ class Parser {
 		const propertiesName = Object.keys(this.callbacksMap);
 
 		const { properties } = exportDeclaration.declaration;
-
-		propertiesName.forEach((propertyName: string) => {
+		for (const propertyName of propertiesName){
 			const property = properties.find((property: any) => {
 				const { name } = property.key;
 				return name === propertyName;
 			});
 
 			results[propertyName] = property;
-		});
+		};
 
 		return results;
 	}
@@ -241,8 +240,8 @@ class Parser {
 	 *
 	 * @param {any} props Ast related to props
 	 */
-	propsCallback (props:any) {
-		const dataParser = new PropsParser(props);
+	propsCallback (properties:any) {
+		const dataParser = new PropertiesParser(properties);
 		const convertedData = dataParser.setfullInput(this.input).convert();
 
 		this.propsIdentifiers = dataParser.getIdentifiers();
@@ -263,9 +262,9 @@ class Parser {
 		const properties = this.getProperties();
 
 		// Loop through keys and trigger the related callback
-		Object.entries(this.callbacksMap).forEach(([key, callbackName]) => {
+		for (const [key, callbackName] of Object.entries(this.callbacksMap)) {
 			if (!properties[key]) {
-				return;
+				continue;
 			}
 
 			const callbackFunction = this[callbackName as keyof this];
@@ -275,7 +274,7 @@ class Parser {
 			}
 
 			callbackFunction.call(this, properties[key], key);
-		});
+		}
 
 		return {
 			importDeclarations: this.getImportDeclaration(),

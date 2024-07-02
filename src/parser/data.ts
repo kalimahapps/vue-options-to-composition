@@ -149,7 +149,7 @@ class DataParser {
 	 */
 	convert() :string[] {
 		const output :string[] = [];
-		this.properties.forEach((property: any) => {
+		for (const property of this.properties) {
 			const { name: keyName, value: keyValue } = property.key;
 
 			const identifier = keyName || keyValue;
@@ -167,14 +167,14 @@ class DataParser {
 				this.imports.reactive = true;
 
 				this.identifiers[identifier] = 'reactive';
-				return;
+				continue;
 			}
 
 			// If not, it's a simple value
 			output.push(`const ${identifier} = ref(${property.value.raw});`);
 			this.imports.ref = true;
 			this.identifiers[identifier] = 'ref';
-		});
+		};
 
 		return output;
 	}

@@ -1,8 +1,6 @@
-import { codeToHtml } from 'shiki'
 import jameelTheme from '@/jameel-color-theme.json';
 import { createHighlighterCore } from 'shiki/core';
 import getWasm from 'shiki/wasm';
-
 
 /**
  * Highlight the output code
@@ -12,16 +10,15 @@ import getWasm from 'shiki/wasm';
  */
 const highlight = async function(code: string) : Promise<string>{
 	const highlighter = await createHighlighterCore({
-		themes: [
-			jameelTheme
-		],
-		langs: [
-			import('shiki/langs/javascript.mjs'),
-		],
-		loadWasm: getWasm
+		themes: [jameelTheme],
+		langs: [import('shiki/langs/javascript.mjs')],
+		loadWasm: getWasm,
 	});
 
-	return highlighter.codeToHtml(code, {lang: 'javascript', theme: jameelTheme});
+	return highlighter.codeToHtml(code, {
+		lang: 'javascript',
+		theme: jameelTheme,
+	});
 };
 
 export {

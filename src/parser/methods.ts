@@ -84,11 +84,11 @@ class MethodParser {
 	/**
 	 * Set prop identifiers to replace `this` keyword
 	 *
-	 * @param  {string[]} propsIdentifiers List of prop identifiers
-	 * @return {this}                      The current instance
+	 * @param  {string[]} propertiesIdentifiers List of prop identifiers
+	 * @return {this}                           The current instance
 	 */
-	setPropsIdentifiers (propsIdentifiers: string[]):this {
-		this.propsIdentifiers = propsIdentifiers;
+	setPropsIdentifiers (propertiesIdentifiers: string[]):this {
+		this.propsIdentifiers = propertiesIdentifiers;
 		return this;
 	}
 
@@ -174,8 +174,8 @@ class MethodParser {
 			}
 
 			// Check if identifier is a prop
-			const isProp = this.propsIdentifiers.includes(identifier);
-			if (isProp) {
+			const isProperty = this.propsIdentifiers.includes(identifier);
+			if (isProperty) {
 				return `props.${identifier}`;
 			}
 
@@ -187,11 +187,11 @@ class MethodParser {
 	 * Get self identifiers (the method that belongs to the current type)
 	 */
 	getSelfIdentifiers () {
-		this.methods.forEach((property: any) => {
+		for (const property of this.methods) {
 			const { key } = property;
 
 			this.selfIdentifiers.push(key.name);
-		});
+		}
 	}
 
 	/**
@@ -207,8 +207,7 @@ class MethodParser {
 		const output :string[] = [];
 
 		this.getSelfIdentifiers();
-
-		this.methods.forEach((property: any) => {
+		for (const property of this.methods) {
 			const { key, value } = property;
 
 			const { start, end, type, async } = value;
@@ -284,7 +283,7 @@ class MethodParser {
 
 			// Push with an empty value to add a new line
 			output.push(updatedFunction, '');
-		});
+		};
 
 		return output;
 	}

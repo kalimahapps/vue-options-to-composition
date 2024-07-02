@@ -89,8 +89,8 @@ class Lifecycle {
 	 * @param  {string[]} propsIdentifiers List of prop identifiers
 	 * @return {this}                      The current instance
 	 */
-	setPropsIdentifiers (propsIdentifiers: string[]):this {
-		this.propsIdentifiers = propsIdentifiers;
+	setPropsIdentifiers (propertiesIdentifiers: string[]):this {
+		this.propsIdentifiers = propertiesIdentifiers;
 		return this;
 	}
 
@@ -140,8 +140,8 @@ class Lifecycle {
 			}
 
 			// Check if identifier is a prop
-			const isProp = this.propsIdentifiers.includes(identifier);
-			if (isProp) {
+			const isProperty = this.propsIdentifiers.includes(identifier);
+			if (isProperty) {
 				return `props.${identifier}`;
 			}
 
