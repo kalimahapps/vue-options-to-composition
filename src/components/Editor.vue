@@ -1,4 +1,9 @@
 <template>
+	<div class="flex-col mt-5 px-1">
+		<input type="checkbox" id="checkbox" v-model="withCommentsSections" />
+		<label for="checkbox">&nbsp; sections comments</label>
+	</div>
+
 	<div
 		class="flex-col
 			grow
@@ -143,6 +148,8 @@ const { copy, copied } = useClipboard();
  */
 const updatedCode = ref('');
 
+const withCommentsSections = ref(true);
+
 /**
  * User input code
  */
@@ -203,10 +210,9 @@ worker.addEventListener('message', (event: any) => {
 	loading.value = false;
 });
 
-/**
- * Watch input and process it (parse, format, highlight ... etc.)
- */
-watch(debouncedInput, (value) => {
+const processCode = () => {
+	const { value } = debouncedInput;
+
 	errorMessage.value = '';
 
 	if (!value){
@@ -218,7 +224,11 @@ watch(debouncedInput, (value) => {
 
 	try {
 		loading.value = true;
-		const ParseInput = new Parser(value);
+		const ParseInput = new Parser(
+			value, {
+				withCommentsSections: withCommentsSections.value,
+			}
+		);
 		const { imports, output, importDeclarations } = ParseInput.parse();
 
 		// Add required imports (e.g. ref, computed, etc.)
@@ -252,7 +262,13 @@ watch(debouncedInput, (value) => {
 		const char = value[pos];
 		errorMessage.value = `${message}: \n <strong>${char}</strong>${errorSnippet} ...`;
 	}
-});
+};
+
+/**
+ * Watch input and process it (parse, format, highlight ... etc.)
+ */
+watch(debouncedInput, processCode);
+watch(withCommentsSections, processCode);
 </script>
 
 <style scoped>
