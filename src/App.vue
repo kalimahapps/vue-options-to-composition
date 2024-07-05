@@ -10,8 +10,6 @@
 		<div class="flex flex-col h-full max-w-[1200px] px-2 w-full">
 			<div
 				class="bg-slate-50/10
-					border-b
-					border-sky-900/10
 					flex
 					desktop:flex-row
 					items-center

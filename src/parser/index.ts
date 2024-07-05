@@ -70,12 +70,29 @@ class Parser {
 	computedIdentifiers : string[] = [];
 
 	/**
+	 * Show heading comments for each section (eg: // Data, // Methods .. etc)
+	 */
+	showSectionComment = true;
+
+	/**
 	 * Constructor
 	 *
 	 * @param {string} input The input string
+	 * @param {object} props initial props
 	 */
-	constructor (input:string) {
+	constructor (input:string, constructorProperties: Partial<Parser> = {}) {
 		this.input = input;
+		Object.assign(this, constructorProperties);
+	}
+
+	commentInlineSection (comment: string): string | undefined {
+		return this.showSectionComment ? `// ${comment}` : undefined;
+	}
+
+	outputAddLines(...arguments_: any[]) {
+		this.output.push(...arguments_.filter((line) => {
+			return !(line === null || line === undefined);
+		}));
 	}
 
 	/**
@@ -148,7 +165,7 @@ class Parser {
 			.convert();
 
 		const title = key.charAt(0).toUpperCase() + key.slice(1);
-		this.output.push('', `// ${title}`, convertedData);
+		this.outputAddLines('', this.commentInlineSection(`${title}`), convertedData);
 
 		const hookImport = lifecycleParser.getImport();
 		if (hookImport) {
@@ -172,7 +189,7 @@ class Parser {
 		}
 
 		this.imports.push(...dataImports);
-		this.output.push('', '// Data', ...convertedData);
+		this.outputAddLines('', this.commentInlineSection('Data'), ...convertedData);
 	}
 
 	/**
@@ -189,7 +206,7 @@ class Parser {
 			.convert();
 
 		this.methodIdentifiers = methodParser.getMethodIdentifiers();
-		this.output.push('', '// Methods', ...convertedMethods);
+		this.outputAddLines('', this.commentInlineSection('Methods'), ...convertedMethods);
 	}
 
 	/**
@@ -210,7 +227,7 @@ class Parser {
 
 		this.computedIdentifiers = methodParser.getComputedIdentifiers();
 
-		this.output.push('', '// Computed', ...convertedMethods);
+		this.outputAddLines('', this.commentInlineSection('Computed'), ...convertedMethods);
 		this.imports.push('computed');
 	}
 
@@ -231,7 +248,7 @@ class Parser {
 			.setComputedIdentifiers(this.computedIdentifiers)
 			.convert();
 
-		this.output.push('', '// Watch', ...convertedMethods);
+		this.outputAddLines('', this.commentInlineSection('Watch'), ...convertedMethods);
 		this.imports.push('watch');
 	}
 
@@ -245,7 +262,7 @@ class Parser {
 		const convertedData = dataParser.setfullInput(this.input).convert();
 
 		this.propsIdentifiers = dataParser.getIdentifiers();
-		this.output.push('', '// Props', convertedData);
+		this.outputAddLines('', this.commentInlineSection('Props'), convertedData);
 	}
 
 	/**

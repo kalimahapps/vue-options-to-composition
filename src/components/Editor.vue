@@ -91,25 +91,52 @@ It should have: export default {
 			<template v-else>
 				<div
 					v-if="!errorMessage"
-					class="absolute
-						top-2
-						right-4
-						bg-zinc-200
-						cursor-pointer
-						opacity-50
-						hover:opacity-100
-						p-2
-						text-xl
-						transition"
-					@click="copyOutput"
+					class="bg-[#1e2429]
+						border-b
+						border-sky-100/10
+						flex
+						gap-2
+						p-2"
 				>
-					<AnOutlinedCopy v-if="!copied " />
-
 					<div
-						v-if="copied"
-						class="font-poppins text-xs"
+						class="bg-zinc-200
+							cursor-pointer
+							flex
+							items-center
+							gap-2
+							opacity-90
+							hover:opacity-100
+							p-2
+							rounded
+							transition"
+						@click="showSectionComment = !showSectionComment"
 					>
-						Copied!
+						<AkCheck v-if="showSectionComment" class="text-lg" />
+						<AkXSmall v-else class="text-lg" />
+						<div class="font-poppins text-xs">
+							Section Comment
+						</div>
+					</div>
+					<div
+						class="bg-zinc-200
+							cursor-pointer
+							flex
+							items-center
+							gap-2
+							opacity-80
+							hover:opacity-100
+							p-2
+							rounded
+							transition"
+						@click="copyOutput"
+					>
+						<AnOutlinedCopy v-if="!copied " class="text-xl" />
+
+						<div
+							class="font-poppins text-sm"
+						>
+							{{ copied ? 'Copied!' : 'Copy' }}
+						</div>
 					</div>
 				</div>
 
@@ -142,6 +169,8 @@ const { copy, copied } = useClipboard();
  * Updated code after converting and formatting
  */
 const updatedCode = ref('');
+
+const showSectionComment = ref(true);
 
 /**
  * User input code
@@ -203,10 +232,9 @@ worker.addEventListener('message', (event: any) => {
 	loading.value = false;
 });
 
-/**
- * Watch input and process it (parse, format, highlight ... etc.)
- */
-watch(debouncedInput, (value) => {
+const processCode = () => {
+	const { value } = debouncedInput;
+
 	errorMessage.value = '';
 
 	if (!value){
@@ -218,7 +246,11 @@ watch(debouncedInput, (value) => {
 
 	try {
 		loading.value = true;
-		const ParseInput = new Parser(value);
+		const ParseInput = new Parser(
+			value, {
+				showSectionComment: showSectionComment.value,
+			}
+		);
 		const { imports, output, importDeclarations } = ParseInput.parse();
 
 		// Add required imports (e.g. ref, computed, etc.)
@@ -252,7 +284,13 @@ watch(debouncedInput, (value) => {
 		const char = value[pos];
 		errorMessage.value = `${message}: \n <strong>${char}</strong>${errorSnippet} ...`;
 	}
-});
+};
+
+/**
+ * Watch input and process it (parse, format, highlight ... etc.)
+ */
+watch(debouncedInput, processCode);
+watch(showSectionComment, processCode);
 </script>
 
 <style scoped>
