@@ -10,6 +10,9 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     AboutModal: typeof import('./src/components/AboutModal.vue')['default']
+    AkCheck: typeof import('@kalimahapps/vue-icons/ak')['AkCheck']
+    AkX: typeof import('@kalimahapps/vue-icons/ak')['AkX']
+    AkXSmall: typeof import('@kalimahapps/vue-icons/ak')['AkXSmall']
     AnOutlinedCopy: typeof import('@kalimahapps/vue-icons/an')['AnOutlinedCopy']
     BxTwitter: typeof import('@kalimahapps/vue-icons/bx')['BxTwitter']
     CgClose: typeof import('@kalimahapps/vue-icons/cg')['CgClose']

@@ -69,7 +69,10 @@ class Parser {
 	 */
 	computedIdentifiers : string[] = [];
 
-	withCommentsSections = true;
+	/**
+	 * Show heading comments for each section (eg: // Data, // Methods .. etc)
+	 */
+	showSectionComment = true;
 
 	/**
 	 * Constructor
@@ -83,7 +86,7 @@ class Parser {
 	}
 
 	commentInlineSection (comment: string): string | undefined {
-		return this.withCommentsSections ? `// ${comment}` : undefined;
+		return this.showSectionComment ? `// ${comment}` : undefined;
 	}
 
 	outputAddLines(...arguments_: any[]) {
