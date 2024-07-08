@@ -24,7 +24,7 @@
 		"@tailwindcss/typography": "^0.5.13",
 		"@types/node": "^20.14.10",
 		"@vitejs/plugin-vue": "^5.0.5",
-		"@vitest/coverage-v8": "^1.6.0",
+		"@vitest/coverage-istanbul": "^1.6.0",
 		"autoprefixer": "^10.4.19",
 		"eslint": "^9.6.0",
 		"postcss": "^8.4.39",
