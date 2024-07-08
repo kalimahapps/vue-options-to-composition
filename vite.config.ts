@@ -3,7 +3,6 @@ import path from 'node:path';
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import AutoImport from 'unplugin-auto-import/vite';
-import inheritAttrs from 'vite-plugin-vue-setup-inherit-attrs';
 import VueIconsResolver from '@kalimahapps/vue-icons/resolver';
 import Components from 'unplugin-vue-components/vite';
 
@@ -17,9 +16,21 @@ export default defineConfig({
 	worker: {
 		format: 'es',
 	},
+	build: {
+		rollupOptions: {
+			output: {
+				manualChunks: {
+					vue: ['vue'],
+					eslint: ['eslint-linter-browserify'],
+					shiki: ['shiki/core', 'shiki/wasm'],
+					acorn: ['acorn'],
+					vueIcons: ['@kalimahapps/vue-icons'],
+				},
+			},
+		},
+	},
 	plugins: [
 		vue(),
-		inheritAttrs(),
 		AutoImport({
 			// global imports to register
 			imports: [
