@@ -1,45 +1,45 @@
 {
-  "name": "vue-options-to-composition",
-  "version": "1.0.0",
-  "type": "module",
-  "private": true,
-  "scripts": {
-    "build": "vue-tsc && vite build",
-    "dev": "vite",
-    "preview": "vite preview",
-    "test": "vitest",
-    "test:coverage": "vitest run --coverage"
-  },
-  "dependencies": {
-    "@kalimahapps/vue-icons": "^1.7.1",
-    "@vueuse/core": "^10.1.2",
-    "acorn": "^8.8.2",
-    "eslint-linter-browserify": "^8.41.0",
-    "shiki": "^1.10.0",
-    "vue": "^3.4.31"
-  },
-  "devDependencies": {
-    "@kalimahapps/eslint-config": "^1.2.8",
-    "@kalimahapps/eslint-plugin-tailwind": "^1.1.0",
-    "@tailwindcss/typography": "^0.5.9",
-    "@types/node": "^20.14.9",
-    "@vitejs/plugin-vue": "^5.0.5",
-    "@vitest/coverage-c8": "^0.31.1",
-    "autoprefixer": "^10.4.14",
-    "eslint": "^9.6.0",
-    "postcss": "^8.4.23",
-    "sass": "^1.62.1",
-    "tailwindcss": "^3.3.2",
-    "typescript": "^5.5.3",
-    "unplugin-auto-import": "^0.17.6",
-    "unplugin-vue-components": "^0.24.1",
-    "vite": "^5.3.2",
-    "vite-plugin-chunk-split": "^0.4.7",
-    "vite-plugin-vue-setup-inherit-attrs": "^1.0.8",
-    "vitest": "^1.6.0",
-    "vue-tsc": "^2.0.24"
-  },
-  "engines": {
-    "node": ">=18.0.0"
-  }
+	"name": "vue-options-to-composition",
+	"version": "1.0.1",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"build": "vue-tsc && vite build",
+		"dev": "vite",
+		"preview": "vite preview",
+		"test": "vitest",
+		"test:coverage": "vitest run --coverage"
+	},
+	"dependencies": {
+		"@kalimahapps/vue-icons": "^1.7.1",
+		"@vueuse/core": "^10.11.0",
+		"acorn": "^8.12.1",
+		"eslint-linter-browserify": "^9.6.0",
+		"shiki": "^1.10.3",
+		"vue": "^3.4.31"
+	},
+	"devDependencies": {
+		"@kalimahapps/eslint-config": "^1.2.91",
+		"@kalimahapps/eslint-plugin-tailwind": "^1.1.0",
+		"@tailwindcss/typography": "^0.5.13",
+		"@types/node": "^20.14.10",
+		"@vitejs/plugin-vue": "^5.0.5",
+		"@vitest/coverage-v8": "^1.6.0",
+		"autoprefixer": "^10.4.19",
+		"eslint": "^9.6.0",
+		"postcss": "^8.4.39",
+		"sass": "^1.77.6",
+		"tailwindcss": "^3.4.4",
+		"typescript": "^5.5.3",
+		"unplugin-auto-import": "^0.17.6",
+		"unplugin-vue-components": "^0.24.1",
+		"vite": "^5.3.3",
+		"vite-plugin-chunk-split": "^0.4.7",
+		"vite-plugin-vue-setup-inherit-attrs": "^1.0.10",
+		"vitest": "^1.6.0",
+		"vue-tsc": "^2.0.24"
+	},
+	"engines": {
+		"node": ">=18.0.0"
+	}
 }

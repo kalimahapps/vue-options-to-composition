@@ -10,7 +10,7 @@ const format = function(code: string): string{
 	const linter = new eslint.Linter();
 
 	const results = linter.verifyAndFix(code, {
-		parserOptions: {
+		languageOptions: {
 			sourceType: 'module',
 			ecmaVersion: 'latest',
 		},
