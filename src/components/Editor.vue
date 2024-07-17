@@ -31,7 +31,6 @@
 			<textarea
 				v-model="userInput"
 				placeholder="Paste your Vue 2 Options API code here.
-The code between the <script> tags.
 
 It should have: export default {
 	...
@@ -232,10 +231,15 @@ worker.addEventListener('message', (event: any) => {
 	loading.value = false;
 });
 
+// eslint-disable-next-line complexity
 const processCode = () => {
 	const { value } = debouncedInput;
 
-	errorMessage.value = '';
+	// eslint-disable-next-line prefer-named-capture-group
+	const replaceTagsResult = value.replaceAll(
+		/[\s\S\n\r]*^<script[\s]*[^>]*>[\n\r\s]*([\s\S\n\r]*)^<\/script>[\s\S\n\r]*/gmu,
+		'$1'
+	);
 
 	if (!value){
 		compositionOutput.value = '';
@@ -243,6 +247,13 @@ const processCode = () => {
 		worker.terminate();
 		return;
 	}
+
+	if (replaceTagsResult !== value) {
+		userInput.value = replaceTagsResult;
+		return;
+	}
+
+	errorMessage.value = '';
 
 	try {
 		loading.value = true;
