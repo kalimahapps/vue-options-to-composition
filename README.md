@@ -1,3 +1,5 @@
+# This repo is archived. The project has been moved to [Kalimah Tools](https://github.com/kalimahapps/tools)
+
 # Vue Options to Composition API Converter
 
 ## Introduction
